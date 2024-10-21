@@ -15,6 +15,7 @@ class Movies {
 
   // Display Movies
   displayMovies() {
+    // Get first instance of the category in an array with set.
     const uniqueCategory = [
       ...new Set(allMoviesArr.map((item) => item.category)),
     ];
