@@ -2,8 +2,8 @@ const CATEGORIES = document.getElementById("categories");
 const MOVIES_CONTAINER = document.getElementById("movies-container");
 
 class MovieInfo {
-  constructor(id, category) {
-    this.id = id;
+  constructor(name, category) {
+    this.name = name;
     this.category = category;
   }
 }
@@ -15,9 +15,13 @@ class Movies {
 
   // Display Movies
   displayMovies() {
-    let movies = allMoviesArr.map((movie) => {
+    const uniqueCategory = [
+      ...new Set(allMoviesArr.map((item) => item.category)),
+    ];
+
+    let movies = uniqueCategory.map((uniqueCat) => {
       return `
-        <button id="${movie.category}" class="filter-btn py-1 px-3 rounded-lg hover:bg-red-800">${movie.category}</button>
+        <button id="${uniqueCat}" class="filter-btn py-1 px-3 rounded-lg hover:bg-red-800">${uniqueCat}</button>
         `;
     });
 
@@ -27,25 +31,27 @@ class Movies {
 
     filterBtn.forEach((filter) => {
       filter.addEventListener("click", () => {
-        if (filter.getAttribute("id") === "Action") {
-          MOVIES_CONTAINER.innerHTML = `Action Movies`;
-        } else if (filter.getAttribute("id") === "Drama") {
-          MOVIES_CONTAINER.innerHTML = `Drama Movies`;
-        } else {
-          MOVIES_CONTAINER.innerHTML = `Horror Movies`;
-        }
+        let moviesTodisplay = allMoviesArr.filter(
+          (item) => item.category === filter.getAttribute("id")
+        );
+
+        MOVIES_CONTAINER.innerHTML = moviesTodisplay
+          .map((item) => `<p>${item.name}</p>`)
+          .join(" ");
       });
     });
   }
 }
 
 let allMoviesArr = [
-  new MovieInfo(1, "Action"),
-  new MovieInfo(2, "Drama"),
-  new MovieInfo(3, "Horror"),
+  new MovieInfo("Blade", "Action"),
+  new MovieInfo("Titanic", "Drama"),
+  new MovieInfo("SAW", "Horror"),
+  new MovieInfo("The One", "Action"),
+  new MovieInfo("Proposal", "Drama"),
+  new MovieInfo("Karashika", "Horror"),
 ];
 
 const Movies_Holder = new Movies(allMoviesArr);
 
 Movies_Holder.displayMovies();
-// MOVIES_CONTAINER.filterMovies();
